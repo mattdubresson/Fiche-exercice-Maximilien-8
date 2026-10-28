@@ -1,0 +1,369 @@
+\documentclass[11pt,a4paper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[french]{babel}
+\usepackage{lmodern}
+\usepackage{amsmath,amssymb}
+\usepackage[margin=2.2cm]{geometry}
+\usepackage{enumitem}
+\usepackage{tkz-tab}
+\usepackage{listings}
+\usepackage{fancyhdr}
+
+\lstset{
+  language=Python,
+  basicstyle=\ttfamily\small,
+  frame=single,
+  columns=fullflexible,
+  keepspaces=true,
+  showstringspaces=false
+}
+
+\pagestyle{fancy}
+\fancyhf{}
+\lhead{Corrigé -- Fiche d'exercices pour Maximilien (8)}
+\rhead{\thepage}
+
+\newcommand{\e}{\mathrm{e}}
+\newcommand{\R}{\mathbb{R}}
+\setlist[enumerate,1]{label=\arabic*.}
+\setlist[enumerate,2]{label=(\alph*)}
+
+\newcommand{\exo}[1]{\section*{#1}}
+\newcommand{\rep}{\par\smallskip\noindent\textbf{Réponse. }}
+
+\begin{document}
+
+\begin{center}
+{\Large\bfseries Corrigé détaillé de la fiche d'exercices (8)}\\[2pt]
+28/10/2026
+\end{center}
+
+%==========================================================
+\exo{Exercice 1 (Métropole 1 2026)}
+%==========================================================
+
+On a $u_0 = 20$ et, pour tout $n\in\mathbb{N}$,
+$u_{n+1} = 0{,}965\,u_n + 0{,}35 + 0{,}07\,\e^{-0{,}1n}$.
+
+\begin{enumerate}
+
+\item \textbf{Montrons que $u_1 = 19{,}72$.}
+
+On applique la relation de récurrence avec $n=0$ :
+\[
+u_1 = 0{,}965\times u_0 + 0{,}35 + 0{,}07\,\e^{0}
+= 0{,}965\times 20 + 0{,}35 + 0{,}07\times 1
+= 19{,}3 + 0{,}35 + 0{,}07 = 19{,}72.
+\]
+
+\item \textbf{Montrons par récurrence que, pour tout $n\in\mathbb{N}$, $u_n > 10$.}
+
+Soit $P(n)$ la propriété : « $u_n > 10$ ».
+
+\emph{Initialisation.} $u_0 = 20 > 10$, donc $P(0)$ est vraie.
+
+\emph{Hérédité.} Soit $n\in\mathbb{N}$ tel que $P(n)$ soit vraie, c'est-à-dire $u_n > 10$.
+Alors $0{,}965\,u_n > 0{,}965\times 10 = 9{,}65$, d'où
+\[
+u_{n+1} = 0{,}965\,u_n + 0{,}35 + 0{,}07\,\e^{-0{,}1n}
+> 9{,}65 + 0{,}35 + 0{,}07\,\e^{-0{,}1n}
+= 10 + 0{,}07\,\e^{-0{,}1n}.
+\]
+Or $0{,}07\,\e^{-0{,}1n} > 0$ car une exponentielle est strictement positive, donc $u_{n+1} > 10$ : $P(n+1)$ est vraie.
+
+\emph{Conclusion.} Par récurrence, pour tout $n\in\mathbb{N}$, $u_n > 10$.
+
+\item \textbf{Convergence de $(u_n)$.}
+
+La suite $(u_n)$ est décroissante (admis) et minorée par $10$ (question 2).
+D'après le théorème de convergence monotone, \emph{toute suite décroissante et minorée converge}.
+Donc $(u_n)$ est convergente.
+
+\item \textbf{Limite de $(u_n)$.}
+
+\begin{enumerate}
+\item Notons $\ell$ la limite de $(u_n)$. Alors $\lim_{n\to+\infty}u_{n+1}=\ell$ également.
+De plus, $\lim_{n\to+\infty}\e^{-0{,}1n}=0$ car $-0{,}1n\to-\infty$.
+Par opérations sur les limites, le membre de droite de $u_{n+1} = 0{,}965\,u_n + 0{,}35 + 0{,}07\,\e^{-0{,}1n}$
+tend vers $0{,}965\,\ell + 0{,}35$. Par unicité de la limite :
+\[
+\ell = 0{,}965\,\ell + 0{,}35.
+\]
+Donc $\ell$ est solution de l'équation $x = 0{,}965\,x + 0{,}35$.
+
+\item On résout :
+\[
+x = 0{,}965\,x + 0{,}35 \iff 0{,}035\,x = 0{,}35 \iff x = \dfrac{0{,}35}{0{,}035} = 10.
+\]
+Donc $\ell = 10$.
+
+\emph{Interprétation.} À long terme, la température de la pièce se stabilise à $10\,^{\circ}\mathrm{C}$
+(température vers laquelle la pièce tend à se refroidir sans chauffage).
+\end{enumerate}
+
+\item \textbf{Remise en marche du chauffage.}
+
+\begin{enumerate}
+\item Le chauffage se remet en marche dès que $u_n \leqslant 18$.
+On boucle donc tant que $u > 18$ (la fonction \texttt{exp} provient du module \texttt{math}) :
+\begin{lstlisting}
+from math import exp
+
+def marche():
+    n = 0
+    u = 20
+    while u > 18:
+        u = 0.965*u + 0.35 + 0.07*exp(-0.1*n)
+        n = n + 1
+    return n
+\end{lstlisting}
+Ligne 4 : \texttt{while u > 18 :}\quad
+Ligne 5 : \texttt{u = 0.965*u + 0.35 + 0.07*exp(-0.1*n)}\quad
+Ligne 6 : \texttt{n = n + 1}.
+
+\item On calcule les premiers termes (arrondis au centième) :
+\begin{center}
+\begin{tabular}{|c|*{9}{c|}}
+\hline
+$n$ & 0 & 1 & 2 & 3 & 4 & 5 & 6 & 7 & 8 \\ \hline
+$u_n$ & 20 & 19,72 & 19,44 & 19,17 & 18,90 & 18,64 & 18,38 & 18,12 & 17,87 \\ \hline
+\end{tabular}
+\end{center}
+On a $u_7 \approx 18{,}12 > 18$ et $u_8 \approx 17{,}87 \leqslant 18$.
+Comme la suite est décroissante, $n=8$ est la première valeur pour laquelle $u_n\leqslant 18$.
+Le programme renvoie donc $8$ : le chauffage se remet en marche au bout de
+\textbf{8 dizaines de minutes}, soit \textbf{80 minutes}.
+\end{enumerate}
+
+\end{enumerate}
+
+%==========================================================
+\newpage
+\exo{Exercice 2 (Métropole 1 2026)}
+%==========================================================
+
+$f(x) = a + \dfrac{b\ln(x+1)}{x+1}$ sur $]-1;+\infty[$.
+
+\subsection*{Partie A}
+
+\begin{enumerate}
+
+\item \textbf{Justifions que $a=1$.}
+
+Le point $A(0;1)$ appartient à la courbe, donc $f(0)=1$. Or
+\[
+f(0) = a + \dfrac{b\ln(1)}{1} = a + 0 = a.
+\]
+Donc $a = 1$.
+
+\item \textbf{Lectures graphiques.}
+
+\begin{enumerate}
+\item $f'(0)$ est le coefficient directeur de la tangente $T_A$ à la courbe en $A(0;1)$.
+Sur le graphique, $T_A$ passe par $A(0;1)$ et par le point de coordonnées $(1\,;\,5)$. Donc
+\[
+f'(0) = \dfrac{5-1}{1-0} = 4.
+\]
+
+\item Sur le graphique, la courbe est \emph{concave} au voisinage de $x=1$ : la pente de la tangente
+diminue (elle vaut $4$ en $0$ et s'annule au maximum de la courbe, après $x=1$).
+Donc $f'$ est décroissante autour de $1$, ce qui signifie $f''(1) < 0$.
+\end{enumerate}
+
+\item \textbf{Calcul de $f'$ et valeur de $b$.}
+
+\begin{enumerate}
+\item Posons $u(x)=\ln(x+1)$ et $v(x)=x+1$, de dérivées $u'(x)=\dfrac{1}{x+1}$ et $v'(x)=1$.
+Pour $x>-1$, avec $f(x)=1+b\,\dfrac{u(x)}{v(x)}$ :
+\[
+f'(x) = b\times\dfrac{u'(x)v(x)-u(x)v'(x)}{v(x)^2}
+= b\times\dfrac{\dfrac{1}{x+1}\times(x+1) - \ln(x+1)\times 1}{(x+1)^2}
+= \dfrac{b\bigl(1-\ln(x+1)\bigr)}{(x+1)^2}.
+\]
+
+\item D'après la question 2.(a), $f'(0)=4$. Or
+\[
+f'(0) = \dfrac{b\,(1-\ln 1)}{1^2} = b.
+\]
+Donc $b = 4$.
+\end{enumerate}
+
+\end{enumerate}
+
+\subsection*{Partie B}
+
+On a désormais $f(x) = 1 + \dfrac{4\ln(x+1)}{x+1}$ sur $]-1;+\infty[$.
+
+\begin{enumerate}
+
+\item \textbf{Asymptote.}
+
+On pose $X = x+1$ ; quand $x\to+\infty$, $X\to+\infty$. Par croissances comparées,
+$\lim_{X\to+\infty}\dfrac{\ln X}{X}=0$, donc
+\[
+\lim_{x\to+\infty} \dfrac{4\ln(x+1)}{x+1} = 0
+\qquad\text{et}\qquad
+\lim_{x\to+\infty} f(x) = 1.
+\]
+La droite d'équation $y=1$ est donc asymptote horizontale à la courbe de $f$ en $+\infty$.
+
+\item \textbf{Inéquation $1-\ln(x+1)>0$ sur $]-1;+\infty[$.}
+
+\[
+1-\ln(x+1)>0 \iff \ln(x+1)<1 \iff x+1<\e \iff x<\e-1,
+\]
+car la fonction exponentielle est strictement croissante. L'ensemble des solutions est
+$\;]-1\,;\,\e-1[$.
+
+\item \textbf{Tableau de variation.}
+
+D'après la partie A, avec $b=4$ : $f'(x)=\dfrac{4\bigl(1-\ln(x+1)\bigr)}{(x+1)^2}$.
+Comme $(x+1)^2>0$ sur $]-1;+\infty[$, $f'(x)$ est du signe de $1-\ln(x+1)$ :
+$f'>0$ sur $]-1;\e-1[$, $f'(\e-1)=0$, et $f'<0$ sur $]\e-1;+\infty[$.
+
+Extremum (maximum) :
+\[
+f(\e-1) = 1 + \dfrac{4\ln(\e)}{\e} = 1+\dfrac{4}{\e}.
+\]
+
+\begin{center}
+\begin{tikzpicture}
+\tkzTabInit[lgt=2,espcl=3.5]{$x$/1,$f'(x)$/1,$f(x)$/2}{$-1$,$\e-1$,$+\infty$}
+\tkzTabLine{d,+,z,-,}
+\tkzTabVar{-/$-\infty$, +/$1+\dfrac{4}{\e}$, -/$1$}
+\end{tikzpicture}
+\end{center}
+
+(On utilise $\lim_{x\to-1}f(x)=-\infty$ admis, et $\lim_{x\to+\infty}f(x)=1$ vu en question 1.)
+
+\item \textbf{Équation $f(x)=1{,}5$ sur $[2;+\infty[$.}
+
+On a $2>\e-1\approx 1{,}72$, donc $f$ est continue et strictement décroissante sur $[2;+\infty[$.
+De plus
+\[
+f(2) = 1+\dfrac{4\ln 3}{3}\approx 2{,}46 \qquad\text{et}\qquad \lim_{x\to+\infty}f(x)=1,
+\]
+donc $f$ réalise une bijection de $[2;+\infty[$ sur $]1\,;\,f(2)]$.
+Comme $1{,}5\in\,]1\,;\,f(2)]$, d'après le corollaire du théorème des valeurs intermédiaires,
+l'équation $f(x)=1{,}5$ admet une unique solution $\alpha$ dans $[2;+\infty[$.
+
+À la calculatrice :
+\[
+f(25{,}05)\approx 1{,}5006>1{,}5 \qquad\text{et}\qquad f(25{,}15)\approx 1{,}4993<1{,}5.
+\]
+Comme $f$ est décroissante, $25{,}05<\alpha<25{,}15$, donc $\alpha\approx 25{,}1$ (à $10^{-1}$ près).
+\end{enumerate}
+
+%==========================================================
+\newpage
+\exo{Exercice 3 (Métropole 2 2026)}
+%==========================================================
+
+\subsection*{Partie A}
+
+\begin{enumerate}
+
+\item \textbf{Lectures graphiques.}
+
+\begin{enumerate}
+\item La courbe $\mathcal{C}_f$ admet au point $C$ d'abscisse $1$ une tangente parallèle à l'axe des abscisses,
+donc son coefficient directeur est nul : $f'(1)=0$.
+
+\item Le point $A\left(\tfrac12;0\right)$ appartient à $\mathcal{C}_f$ et c'est le point d'intersection
+avec l'axe des abscisses sur $[0;3]$. L'équation $f(x)=0$ a donc pour solution $x=\dfrac12$.
+\end{enumerate}
+
+\item \textbf{Détermination de $f'\left(\tfrac12\right)$.}
+
+$f'\left(\tfrac12\right)$ est le coefficient directeur de la tangente $T_A$, qui passe par
+$A\left(\tfrac12;0\right)$ et $B(1;\e^2)$ :
+\[
+f'\!\left(\tfrac12\right)=\dfrac{\e^2-0}{1-\tfrac12}=2\e^2.
+\]
+
+\item \textbf{Primitives de $f$.}
+
+Une primitive $F$ de $f$ vérifie $F'=f$. Or, d'après la partie A, $f(x)<0$ sur $\left[0;\tfrac12\right[$
+et $f(x)>0$ sur $\left]\tfrac12;+\infty\right[$ (la courbe est sous l'axe avant $A$, au-dessus ensuite).
+Donc toute primitive de $f$ est décroissante sur $\left[0;\tfrac12\right]$, puis croissante sur
+$\left[\tfrac12;+\infty\right[$ : elle admet un \emph{minimum en $x=\tfrac12$}.
+De plus, deux primitives de $f$ diffèrent d'une constante : leurs courbes se déduisent l'une de l'autre
+par translation verticale.
+
+Sur la figure, les courbes $\mathcal{C}_1$ et $\mathcal{C}_2$ ont toutes deux leur minimum en
+$x=\tfrac12$ et se déduisent l'une de l'autre par une translation verticale, alors que $\mathcal{C}_3$
+a son minimum en $x\approx 1$.
+\textbf{Les courbes $\mathcal{C}_1$ et $\mathcal{C}_2$ représentent donc des primitives de $f$.}
+
+\emph{Remarque (vérification).} Avec $f(x)=(2x-1)\e^{-2x+3}$, la fonction $F(x)=-x\,\e^{-2x+3}$ est
+une primitive de $f$ ; les autres sont de la forme $F+k$.
+\end{enumerate}
+
+\subsection*{Partie B}
+
+On admet que $f(x)=(2x-1)\e^{-2x+3}$ sur $[0;+\infty[$.
+
+\begin{enumerate}
+
+\item \begin{enumerate}
+\item \textbf{Vérification.} Pour tout $x\geqslant0$ :
+\[
+f(x)=(2x-1)\e^{-2x+3}=(2x-1)\,\e^{-(2x-1)+2}=\e^{2}\,(2x-1)\,\e^{-(2x-1)}=\e^2\times\dfrac{2x-1}{\e^{2x-1}}.
+\]
+
+\item \textbf{Limite en $+\infty$.} On pose $X=2x-1$ ; quand $x\to+\infty$, $X\to+\infty$ et
+\[
+f(x)=\e^2\times\dfrac{X}{\e^{X}}=\e^2\times\dfrac{1}{\dfrac{\e^X}{X}}.
+\]
+Par croissances comparées, $\lim_{X\to+\infty}\dfrac{\e^X}{X}=+\infty$, donc
+$\lim_{x\to+\infty}f(x)=0$.
+\end{enumerate}
+
+\item \begin{enumerate}
+\item \textbf{Dérivée.} $f=uv$ avec $u(x)=2x-1$, $u'(x)=2$, $v(x)=\e^{-2x+3}$, $v'(x)=-2\,\e^{-2x+3}$ :
+\[
+f'(x)=2\,\e^{-2x+3}+(2x-1)\times(-2)\,\e^{-2x+3}
+=\bigl(2-4x+2\bigr)\e^{-2x+3}=(-4x+4)\,\e^{-2x+3}.
+\]
+
+\item \textbf{Tableau de variation.} Comme $\e^{-2x+3}>0$, $f'(x)$ est du signe de $-4x+4$ :
+positif pour $x<1$, nul en $1$, négatif pour $x>1$. De plus
+$f(0)=(-1)\e^{3}=-\e^3$, $f(1)=\e^{1}=\e$ et $\lim_{x\to+\infty}f(x)=0$.
+
+\begin{center}
+\begin{tikzpicture}
+\tkzTabInit[lgt=2,espcl=3.5]{$x$/1,$f'(x)$/1,$f(x)$/2}{$0$,$1$,$+\infty$}
+\tkzTabLine{,+,z,-,}
+\tkzTabVar{-/$-\e^3$, +/$\e$, -/$0$}
+\end{tikzpicture}
+\end{center}
+\end{enumerate}
+
+\item \textbf{Contrainte du client et détermination de $\alpha$.}
+
+À l'abscisse $\alpha$, le contour est formé du point $(\alpha\,;\,f(\alpha))$ et de son symétrique par
+rapport à l'axe des abscisses $(\alpha\,;\,-f(\alpha))$. L'ouverture du logo mesure donc
+$f(\alpha)-(-f(\alpha))=2f(\alpha)$. L'unité étant le centimètre, la contrainte « $0{,}3$ cm »
+se traduit par $2f(\alpha)=0{,}3$, soit
+\[
+f(\alpha)=0{,}15.
+\]
+
+\emph{Existence et unicité.} Sur $[1;+\infty[$, $f$ est continue et strictement décroissante
+(d'après le tableau), avec $f(1)=\e\approx2{,}72$ et $\lim_{x\to+\infty}f(x)=0$.
+Donc $f$ réalise une bijection de $[1;+\infty[$ sur $]0\,;\,\e]$. Comme $0{,}15\in\,]0\,;\,\e]$,
+l'équation $f(x)=0{,}15$ admet une unique solution $\alpha\in[1;+\infty[$ (corollaire du théorème des
+valeurs intermédiaires).
+
+\emph{Valeur approchée.} À la calculatrice :
+\[
+f(3{,}3)\approx0{,}1530>0{,}15,\qquad f(3{,}35)\approx0{,}1409<0{,}15.
+\]
+Comme $f$ est décroissante, $3{,}3<\alpha<3{,}35$, donc
+\[
+\alpha\approx3{,}3\quad\text{(arrondi au dixième).}
+\]
+\end{enumerate}
+
+\end{document}

@@ -30,7 +30,8 @@
 \setlist[enumerate,2]{label=(\alph*)}
 
 \newcommand{\exo}[1]{\section*{#1}}
-\newcommand{\rep}{\par\smallskip\noindent\textbf{Réponse. }}
+\newcommand{\V}{\mathsf{V}}
+\newcommand{\F}{\mathsf{F}}
 
 \begin{document}
 
@@ -257,7 +258,132 @@ Comme $f$ est décroissante, $25{,}05<\alpha<25{,}15$, donc $\alpha\approx 25{,}
 
 %==========================================================
 \newpage
-\exo{Exercice 3 (Métropole 2 2026)}
+\exo{Exercice 3 (Logique et raisonnement)}
+%==========================================================
+
+\subsection*{Partie A}
+
+\begin{enumerate}
+
+\item \textbf{Table de vérité de $P\Rightarrow Q$.}
+
+L'implication $P\Rightarrow Q$ n'est fausse que lorsque $P$ est vraie et $Q$ fausse.
+\begin{center}
+\begin{tabular}{|c|c|c|}
+\hline
+$P$ & $Q$ & $P\Rightarrow Q$ \\ \hline
+$\V$ & $\V$ & $\V$ \\ \hline
+$\V$ & $\F$ & $\F$ \\ \hline
+$\F$ & $\V$ & $\V$ \\ \hline
+$\F$ & $\F$ & $\V$ \\ \hline
+\end{tabular}
+\end{center}
+
+\item \textbf{Table de vérité de $(\neg Q)\Rightarrow(\neg P)$.}
+
+\begin{center}
+\begin{tabular}{|c|c|c|c|c|}
+\hline
+$P$ & $Q$ & $\neg Q$ & $\neg P$ & $(\neg Q)\Rightarrow(\neg P)$ \\ \hline
+$\V$ & $\V$ & $\F$ & $\F$ & $\V$ \\ \hline
+$\V$ & $\F$ & $\V$ & $\F$ & $\F$ \\ \hline
+$\F$ & $\V$ & $\F$ & $\V$ & $\V$ \\ \hline
+$\F$ & $\F$ & $\V$ & $\V$ & $\V$ \\ \hline
+\end{tabular}
+\end{center}
+
+\item \textbf{Conclusion.}
+
+Les colonnes $P\Rightarrow Q$ et $(\neg Q)\Rightarrow(\neg P)$ sont identiques ligne par ligne
+($\V,\F,\V,\V$). L'affirmation est donc \textbf{vraie} : une implication et sa contraposée sont
+logiquement équivalentes, c'est-à-dire qu'elles ont la même valeur de vérité pour tout couple $(P,Q)$.
+
+\item \textbf{Négation de $R$.}
+
+$R : (x\geqslant0)\ \text{et}\ (y<2)$. D'après les lois de De Morgan, la négation d'une conjonction
+est la disjonction des négations :
+\[
+\neg R : (x<0)\ \text{ou}\ (y\geqslant 2).
+\]
+\end{enumerate}
+
+\subsection*{Partie B}
+
+\begin{enumerate}
+
+\item \textbf{Traduction symbolique de $S$.}
+\[
+S : \quad \forall x\in\R,\ \bigl(f(x)>0 \Rightarrow f'(x)\geqslant 0\bigr).
+\]
+
+\item \textbf{Négation de $S$.}
+
+La négation d'un « pour tout » est un « il existe », et la négation de $A\Rightarrow B$ est
+$A$ et $\neg B$ :
+\[
+\neg S : \quad \exists x\in\R,\ \bigl(f(x)>0 \ \text{ et }\ f'(x)<0\bigr).
+\]
+En français : « Il existe un réel $x$ tel que $f(x)$ soit strictement positif et $f'(x)$ strictement négatif »,
+c'est-à-dire un point où la fonction est positive tout en étant strictement décroissante.
+
+\item \textbf{Contraposée de $S$.}
+
+La contraposée de « $f(x)>0\Rightarrow f'(x)\geqslant0$ » est « $f'(x)<0\Rightarrow f(x)\leqslant0$ » :
+\[
+\forall x\in\R,\ \bigl(f'(x)<0 \Rightarrow f(x)\leqslant 0\bigr).
+\]
+En français : « Pour tout réel $x$, si $f'(x)<0$ alors $f(x)\leqslant 0$ ».
+
+\item \textbf{$S$ est-elle vraie ou fausse ?}
+
+$S$ est \textbf{fausse}. Il suffit de trouver un contre-exemple, c'est-à-dire de prouver $\neg S$.
+Prenons $f(x)=\e^{-x}$, définie et dérivable sur $\R$, avec $f'(x)=-\e^{-x}$.
+Pour $x=0$ : $f(0)=1>0$ et $f'(0)=-1<0$.
+Donc $\neg S$ est vraie, et $S$ est fausse.
+(Comme $S$ est équivalente à sa contraposée, celle-ci est fausse aussi.)
+\end{enumerate}
+
+\subsection*{Partie C}
+
+\begin{enumerate}
+
+\item \textbf{Principe du raisonnement par l'absurde.}
+
+Pour démontrer qu'une proposition $A$ est vraie, on suppose que sa négation $\neg A$ est vraie et on en
+déduit une contradiction (un énoncé absurde : une proposition à la fois vraie et fausse, ou en contradiction
+avec une hypothèse ou un résultat connu). Cette contradiction montre que $\neg A$ est fausse, donc que $A$ est vraie.
+
+\item \textbf{Hypothèse de départ.}
+
+$T$ a la forme « si $H$ alors $C$ » avec $H : a+b\sqrt2=0$ (où $a,b\in\mathbb{Q}$) et $C : a=0\ \text{et}\ b=0$.
+Sa négation est « $H$ et $\neg C$ ». On suppose donc par l'absurde :
+\[
+a,b\in\mathbb{Q},\qquad a+b\sqrt2=0\qquad\text{et}\qquad (a\neq0\ \text{ou}\ b\neq0).
+\]
+(Par De Morgan, $\neg C : a\neq0\ \text{ou}\ b\neq0$.)
+
+\item \textbf{Démonstration.}
+
+Supposons $a,b\in\mathbb{Q}$ avec $a+b\sqrt2=0$ et $(a,b)\neq(0,0)$.
+
+\emph{Cas $b=0$.} L'égalité donne $a=0$, donc $(a,b)=(0,0)$ : contradiction avec l'hypothèse.
+
+\emph{Cas $b\neq0$.} On peut diviser par $b$ :
+\[
+\sqrt2=-\dfrac{a}{b}.
+\]
+Comme $a$ et $b$ sont rationnels et $b\neq0$, $-\dfrac ab$ est un rationnel. Donc $\sqrt2\in\mathbb{Q}$.
+Or $\sqrt2$ est irrationnel. Rappel de la preuve (elle-même par l'absurde) : si $\sqrt2=\dfrac pq$ avec
+$p,q$ entiers premiers entre eux, alors $p^2=2q^2$, donc $p^2$ est pair, donc $p$ est pair, $p=2k$.
+Alors $4k^2=2q^2$, soit $q^2=2k^2$, donc $q$ est pair aussi, ce qui contredit « $p$ et $q$ premiers entre eux ».
+
+Dans les deux cas on aboutit à une contradiction. L'hypothèse de départ est donc fausse, et
+\textbf{la proposition $T$ est vraie} : si $a,b\in\mathbb{Q}$ et $a+b\sqrt2=0$, alors $a=0$ et $b=0$.
+\end{enumerate}
+
+%==========================================================
+\newpage
+\exo{Exercice 4 (Métropole 2 2026)}
 %==========================================================
 
 \subsection*{Partie A}
